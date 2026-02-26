@@ -1,15 +1,8 @@
-import httpx
-from bs4 import BeautifulSoup
 import os
 import re
 from datetime import datetime
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Referer": "https://www.google.com/"
-}
+from bs4 import BeautifulSoup
+from curl_cffi import requests
 
 LHC_URL = "https://data.lhc.gov.pk/reported_judgments/judgments_approved_for_reporting"
 SC_URL = "https://www.supremecourt.gov.pk/latest-judgements/"
@@ -19,10 +12,10 @@ SC_FILE = "sc_judgments.md"
 
 def fetch_content(url):
     try:
-        with httpx.Client(headers=HEADERS, timeout=30.0, follow_redirects=True) as client:
-            response = client.get(url)
-            response.raise_for_status()
-            return response.text
+        # Use curl_cffi to impersonate Chrome and bypass bot protection / TLS fingerprinting
+        response = requests.get(url, impersonate="chrome110", timeout=30)
+        response.raise_for_status()
+        return response.text
     except Exception as e:
         print(f"Error fetching {url}: {e}")
         return None
