@@ -145,12 +145,16 @@ def main():
     print("Fetching LHC judgments...")
     lhc_html = fetch_content(LHC_URL)
     if lhc_html:
+        with open("lhc.html", "w", encoding="utf-8") as f:
+            f.write(lhc_html)
         lhc_judgments = parse_lhc(lhc_html)
         update_markdown(LHC_FILE, lhc_judgments, "LHC Reported Judgments", ["Description", "Link"])
 
     print("\nFetching Supreme Court judgments...")
     sc_html = fetch_content(SC_URL)
     if sc_html:
+        with open("sc.html", "w", encoding="utf-8") as f:
+            f.write(sc_html)
         sc_judgments = parse_sc(sc_html)
         update_markdown(SC_FILE, sc_judgments, "Supreme Court Latest Judgments", ["Sr", "Subject", "Case No", "Title", "Judge", "Uploaded", "Link"])
 
