@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install httpx beautifulsoup4
+        pip install curl_cffi beautifulsoup4
 
     - name: Run monitoring script
       run: python monitor_judgments.py
@@ -32,6 +32,11 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add *_judgments.md
-        git commit -m "Auto-update judgments [skip ci]" || echo "No changes to commit"
-        git push
+        git add *_judgments.md || true
+        status=$(git status --porcelain)
+        if [ -n "$status" ]; then
+          git commit -m "Auto-update judgments [skip ci]"
+          git push
+        else
+          echo "No changes to commit"
+        fi
