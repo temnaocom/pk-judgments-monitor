@@ -28,6 +28,13 @@ jobs:
     - name: Run monitoring script
       run: python monitor_judgments.py
 
+    - name: Upload HTML for debugging
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-html
+        path: "*.html"
+        retention-days: 1
+
     - name: Commit and push changes
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
